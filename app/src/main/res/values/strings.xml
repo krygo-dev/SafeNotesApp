@@ -10,4 +10,8 @@
     <string name="registrationInv">Fill in all fields</string>
     <string name="repeatPassword">Repeat password</string>
     <string name="createAccount">Create account</string>
+    <string name="noteTitle">Title</string>
+    <string name="noteText">Write here…</string>
+    <string name="noteMsg">Message</string>
+
 </resources>
