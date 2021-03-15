@@ -16,4 +16,6 @@
     <string name="logout">Logout</string>
     <string name="saveNote">Save</string>
     <string name="back">Go back</string>
+    <string name="addImage">Add image</string>
+    <string name="share">Share</string>
 </resources>
