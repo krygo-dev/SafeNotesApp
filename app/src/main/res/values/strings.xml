@@ -13,5 +13,7 @@
     <string name="noteTitle">Title</string>
     <string name="noteText">Write here…</string>
     <string name="noteMsg">Message</string>
-
+    <string name="logout">Logout</string>
+    <string name="saveNote">Save</string>
+    <string name="back">Go back</string>
 </resources>
