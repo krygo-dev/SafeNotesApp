@@ -18,4 +18,5 @@
     <string name="back">Go back</string>
     <string name="addImage">Add image</string>
     <string name="share">Share</string>
+    <string name="noteImage">Note image</string>
 </resources>
