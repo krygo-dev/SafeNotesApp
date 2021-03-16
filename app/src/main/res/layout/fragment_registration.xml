@@ -39,7 +39,8 @@
             android:ems="10"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
-            android:backgroundTint="@color/white"/>
+            android:backgroundTint="@color/white"
+            android:textColor="@color/white" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,7 +65,8 @@
             android:ems="10"
             android:hint="@string/password"
             android:inputType="textPassword"
-            android:backgroundTint="@color/white"/>
+            android:backgroundTint="@color/white"
+            android:textColor="@color/white"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,7 +91,8 @@
             android:backgroundTint="@color/white"
             android:ems="10"
             android:hint="@string/repeatPassword"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColor="@color/white"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -1,9 +1,10 @@
-package com.krygodev.safenotes
+package com.krygodev.safenotes.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import com.krygodev.safenotes.R
 
 class AddNoteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

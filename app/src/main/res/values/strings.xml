@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">SafeNotes</string>
-    <string name="sign_in_with_google">Sign in With Google</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
     <string name="email">Email address</string>
     <string name="password">Password</string>
-    <string name="login">Click to sign in</string>
+    <string name="login">Sign in with email</string>
     <string name="register">Create new account</string>
     <string name="invitation">Welcome, please sign in</string>
     <string name="logoDesc">Logo image</string>
