@@ -1,4 +1,4 @@
-package com.example.safenotes
+package com.krygodev.safenotes
 
 import org.junit.Test
 

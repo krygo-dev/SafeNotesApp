@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "159265399545",
+    "project_id": "safenotes-fc6e8",
+    "storage_bucket": "safenotes-fc6e8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:159265399545:android:ec89a5df91dd74f44a7828",
+        "android_client_info": {
+          "package_name": "com.krygodev.safenotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "159265399545-06hor14r42t60vrpag8tidh93cu1gj80.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.krygodev.safenotes",
+            "certificate_hash": "87987bfb16cf151bf0a086da6d3ad85c8e4ee454"
+          }
+        },
+        {
+          "client_id": "159265399545-sgefc71ahmecauo84nfeghsfh1q4u8uf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVfRoEOwBRzLejWk72FD5oPu7miJr8QOU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "159265399545-sgefc71ahmecauo84nfeghsfh1q4u8uf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
