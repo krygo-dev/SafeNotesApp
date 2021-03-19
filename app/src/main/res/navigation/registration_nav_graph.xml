@@ -17,10 +17,22 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_loginFragment_to_resetPasswordFragment"
+            app:destination="@id/resetPasswordFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
         android:name="com.krygodev.safenotes.fragments.RegistrationFragment"
         tools:layout="@layout/fragment_registration"
         android:label="RegistrationFragment" />
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="com.krygodev.safenotes.fragments.ResetPasswordFragment"
+        tools:layout="@layout/fragment_reset_password"
+        android:label="ResetPasswordFragment" />
 </navigation>

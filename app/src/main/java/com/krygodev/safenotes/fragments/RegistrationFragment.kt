@@ -1,15 +1,14 @@
 package com.krygodev.safenotes.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.krygodev.safenotes.R
-import com.krygodev.safenotes.activities.StartupActivity
 import kotlinx.android.synthetic.main.fragment_registration.*
 
 
@@ -17,7 +16,7 @@ class RegistrationFragment: BaseFragment() {
 
     private val fbAuth = FirebaseAuth.getInstance()
     private val REG_DEBUG = "REG_DEBUG"
-    private val EMAIL_VERIFICATION_DEBUG = "EMAIL_VER_DEBUG"
+    private val EMAIL_VERIFICATION_DEBUG = "EMAIL_VERIFICATION_DEBUG"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,20 +50,19 @@ class RegistrationFragment: BaseFragment() {
                             user!!.sendEmailVerification()
                                 .addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
-                                        Snackbar.make(requireView(), "Account created! Verify your email address!", Snackbar.LENGTH_SHORT).show()
+                                        Toast.makeText(context, "Account created! Verify your email address!", Toast.LENGTH_LONG).show()
                                         Log.d(EMAIL_VERIFICATION_DEBUG, "Email sent!")
                                         fbAuth.signOut()
-                                        val intent = Intent(requireContext(), StartupActivity::class.java).apply {
-                                            flags = (Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                        }
-                                        startActivity(intent)
+                                        restartApp()
                                     }
                                 }
                         }
                         .addOnFailureListener { exc ->
-                            Snackbar.make(requireView(), "Registration failed!", Snackbar.LENGTH_SHORT).show()
                             Log.d(REG_DEBUG, exc.message.toString())
-                        }
+                            Snackbar.make(requireView(), exc.message.toString(), Snackbar.LENGTH_LONG).show()
+                }
+                } else {
+                    Snackbar.make(requireView(), "Passwords are different!", Snackbar.LENGTH_SHORT).show()
                 }
             }
         }

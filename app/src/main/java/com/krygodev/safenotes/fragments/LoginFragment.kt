@@ -10,8 +10,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.Api
-import com.google.android.gms.common.api.GoogleApi
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -43,6 +41,7 @@ class LoginFragment: BaseFragment() {
         loginClick()
         googleSignInClick()
         registrationClick()
+        resetPasswordClick()
     }
 
 
@@ -56,10 +55,12 @@ class LoginFragment: BaseFragment() {
             else {
                 fbAuth.signInWithEmailAndPassword(email, password)
                     .addOnSuccessListener { authResult ->
-                        if (authResult.user != null && authResult.user!!.isEmailVerified) startApp()
+                        val user = authResult.user!!
+                        if (user.isEmailVerified) startApp()
+                        else Snackbar.make(requireView(), "Verify your email address!", Snackbar.LENGTH_SHORT).show()
                     }
                     .addOnFailureListener { exc ->
-                        Snackbar.make(requireView(), "Login failed!", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(requireView(), exc.message.toString(), Snackbar.LENGTH_LONG).show()
                         Log.d(LOG_DEBUG, exc.message.toString())
                     }
             }
@@ -84,6 +85,15 @@ class LoginFragment: BaseFragment() {
     }
 
 
+    private fun resetPasswordClick() {
+        reset_password.setOnClickListener {
+            findNavController()
+                .navigate(LoginFragmentDirections.actionLoginFragmentToResetPasswordFragment()
+                    .actionId)
+        }
+    }
+
+
     private fun initGoogleSignIn() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -93,10 +103,10 @@ class LoginFragment: BaseFragment() {
         googleApiClient = context?.let { context ->
             activity?.let { activity ->
                 GoogleApiClient.Builder(context)
-                    .enableAutoManage(activity, GoogleApiClient.OnConnectionFailedListener() { connectionResult ->
+                    .enableAutoManage(activity) { connectionResult ->
                         Snackbar.make(requireView(), "Google sign in failed!", Snackbar.LENGTH_SHORT)
                         Log.d(GOOGLE_LOG_DEBUG, connectionResult.errorMessage.toString())
-                    })
+                    }
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .build()
             }
@@ -128,7 +138,7 @@ class LoginFragment: BaseFragment() {
                 startApp()
             }
             .addOnFailureListener { exc ->
-                Snackbar.make(requireView(), "Google sign in failed!", Snackbar.LENGTH_SHORT)
+                Snackbar.make(requireView(), exc.message.toString(), Snackbar.LENGTH_SHORT)
                 Log.d(GOOGLE_LOG_DEBUG, exc.message.toString())
             }
     }
