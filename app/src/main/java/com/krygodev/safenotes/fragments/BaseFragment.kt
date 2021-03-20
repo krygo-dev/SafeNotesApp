@@ -6,6 +6,7 @@ import com.krygodev.safenotes.activities.HomeScreenActivity
 import com.krygodev.safenotes.activities.StartupActivity
 
 abstract class BaseFragment: Fragment(){
+
     protected fun startApp() {
         val intent = Intent(requireContext(), HomeScreenActivity::class.java).apply {
             flags = (Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)

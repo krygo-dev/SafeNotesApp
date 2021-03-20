@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -15,13 +16,17 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.krygodev.safenotes.R
+import com.krygodev.safenotes.data.User
+import com.krygodev.safenotes.viewmodels.LoginViewModel
 import kotlinx.android.synthetic.main.fragment_login.*
 
 
 class LoginFragment: BaseFragment() {
 
     private val fbAuth = FirebaseAuth.getInstance()
+    private val loginViewModel by viewModels<LoginViewModel>()
     private lateinit var googleApiClient: GoogleApiClient
+
     private val GOOGLE_SIGN_IN_REQUEST_CODE = 0
     private val LOG_DEBUG = "LOG_DEBUG"
     private val GOOGLE_LOG_DEBUG = "GOOGLE_DEBUG"
@@ -135,6 +140,9 @@ class LoginFragment: BaseFragment() {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         fbAuth.signInWithCredential(credential)
             .addOnSuccessListener {
+                val fbUser = fbAuth.currentUser
+                val user = User(fbUser!!.uid, fbUser.displayName!!.substring(0, fbUser.displayName!!.indexOf(" ")), fbUser.email)
+                loginViewModel.createNewGoogleSignInUser(user)
                 startApp()
             }
             .addOnFailureListener { exc ->

@@ -6,15 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.krygodev.safenotes.R
+import com.krygodev.safenotes.data.User
+import com.krygodev.safenotes.viewmodels.RegistrationViewModel
 import kotlinx.android.synthetic.main.fragment_registration.*
 
 
 class RegistrationFragment: BaseFragment() {
 
     private val fbAuth = FirebaseAuth.getInstance()
+    private val registrationViewModel by viewModels<RegistrationViewModel>()
     private val REG_DEBUG = "REG_DEBUG"
     private val EMAIL_VERIFICATION_DEBUG = "EMAIL_VERIFICATION_DEBUG"
 
@@ -46,10 +50,12 @@ class RegistrationFragment: BaseFragment() {
                 if (password == repeatPassword) {
                     fbAuth.createUserWithEmailAndPassword(email, password)
                         .addOnSuccessListener { authResult ->
-                            val user = authResult.user
-                            user!!.sendEmailVerification()
+                            val fbUser = authResult.user
+                            fbUser!!.sendEmailVerification()
                                 .addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
+                                        val user = User(fbUser.uid, "", fbUser.email)
+                                        registrationViewModel.createNewUser(user)
                                         Toast.makeText(context, "Account created! Verify your email address!", Toast.LENGTH_LONG).show()
                                         Log.d(EMAIL_VERIFICATION_DEBUG, "Email sent!")
                                         fbAuth.signOut()

@@ -121,7 +121,7 @@
                 android:id="@+id/view_color_red"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:background="@drawable/background_note_color_red" />
+                android:background="@drawable/background_note_color_red_checked" />
 
         </FrameLayout>
 
