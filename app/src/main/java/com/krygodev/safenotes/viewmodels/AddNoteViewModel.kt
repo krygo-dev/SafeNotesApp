@@ -12,4 +12,8 @@ class AddNoteViewModel: ViewModel() {
     fun createNewNote(note: Note) {
         repository.createNewNote(note)
     }
+
+    fun uploadNotePhoto(bytes: ByteArray, note: Note) {
+        repository.uploadPhoto(bytes, note)
+    }
 }

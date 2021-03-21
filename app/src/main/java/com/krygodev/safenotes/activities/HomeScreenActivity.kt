@@ -42,10 +42,9 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick {
             bindUserData(user)
         } )
 
-        homeScreenViewModel.userNotes.observe(this, Observer { list ->
+        homeScreenViewModel.userNotes.observe(this, Observer<List<Note>> { list ->
             adapter.setNotes(list)
         })
-
     }
 
 

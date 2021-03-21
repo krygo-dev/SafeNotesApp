@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.model.Document
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.krygodev.safenotes.data.Note
 import com.krygodev.safenotes.data.User
 
@@ -101,4 +102,48 @@ class FirebaseRepository {
                 Log.d(REPO_DEBUG, it.message.toString())
             }
     }
+
+
+    fun updateNote(note: Note, map: Map<String, String>) {
+        fbFirestore.collection("Users")
+            .document(uid!!)
+            .collection("Notes")
+            .document(note.id!!)
+            .update(map)
+            .addOnSuccessListener {
+                Log.d(REPO_DEBUG, "Note updated!")
+            }
+            .addOnFailureListener {
+                Log.d(REPO_DEBUG, it.message.toString())
+            }
+    }
+
+
+    fun uploadPhoto(bytes: ByteArray, note: Note) {
+        fbStorage.getReference("notePhotos")
+            .child("${note.id!!}.jpg")
+            .putBytes(bytes)
+            .addOnCompleteListener {
+                Log.d(REPO_DEBUG, "Photo uploaded!")
+            }
+            .addOnSuccessListener {
+                getPhotoURL(it.storage, note)
+            }
+            .addOnFailureListener {
+                Log.d(REPO_DEBUG, it.message.toString())
+            }
+    }
+
+
+    private fun getPhotoURL(storage: StorageReference, note: Note) {
+        storage.downloadUrl
+            .addOnSuccessListener {
+                updateNote(note, mapOf("image" to it.toString()))
+            }
+            .addOnFailureListener {
+                Log.d(REPO_DEBUG, it.message.toString())
+            }
+    }
+
+
 }
