@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.krygodev.safenotes.R
 import com.krygodev.safenotes.adapters.NoteAdapter
@@ -35,7 +36,7 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick {
 
         addNewNote()
 
-        recycler_view_home_screen.layoutManager = GridLayoutManager(applicationContext, 2)
+        recycler_view_home_screen.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recycler_view_home_screen.adapter = adapter
 
         homeScreenViewModel.user.observe(this, Observer<User> { user ->

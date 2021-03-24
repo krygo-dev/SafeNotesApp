@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.krygodev.safenotes.R
@@ -41,7 +42,14 @@ class NoteAdapter(private val listener: OnNoteItemLongClick) : RecyclerView.Adap
         val content = holder.itemView.findViewById<TextView>(R.id.text_card_view)
         val image = holder.itemView.findViewById<ImageView>(R.id.note_image_card_view)
 
-        noteView.setBackgroundColor(Color.parseColor(notesList[holder.adapterPosition].color))
+        when (notesList[holder.adapterPosition].color) {
+            "#de5246" -> noteView.setBackgroundResource(R.drawable.background_note_red)
+            "#fdd835" -> noteView.setBackgroundResource(R.drawable.background_note_yellow)
+            "#3949ab" -> noteView.setBackgroundResource(R.drawable.background_note_blue)
+            "#43a047" -> noteView.setBackgroundResource(R.drawable.background_note_green)
+            "#ffffff" -> noteView.setBackgroundResource(R.drawable.background_note_white)
+        }
+
         title.text = notesList[holder.adapterPosition].title
         content.text = notesList[holder.adapterPosition].content
 
