@@ -8,10 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
@@ -21,11 +20,13 @@ import com.krygodev.safenotes.viewmodels.LoginViewModel
 import kotlinx.android.synthetic.main.fragment_login.*
 
 
+@Suppress("DEPRECATION")
 class LoginFragment: BaseFragment() {
 
-    private val fbAuth = FirebaseAuth.getInstance()
+    private lateinit var fbAuth: FirebaseAuth
+    private lateinit var googleSignInClient: GoogleSignInClient
+
     private val loginViewModel by viewModels<LoginViewModel>()
-    private lateinit var googleApiClient: GoogleApiClient
 
     private val GOOGLE_SIGN_IN_REQUEST_CODE = 0
     private val LOG_DEBUG = "LOG_DEBUG"
@@ -47,6 +48,16 @@ class LoginFragment: BaseFragment() {
         googleSignInClick()
         registrationClick()
         resetPasswordClick()
+
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+
+        fbAuth = FirebaseAuth.getInstance()
     }
 
 
@@ -75,8 +86,8 @@ class LoginFragment: BaseFragment() {
 
     private fun googleSignInClick() {
         sign_in_google_button.setOnClickListener {
-            initGoogleSignIn()
-            signInWithGoogle()
+            val signInIntent = googleSignInClient.signInIntent
+            startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST_CODE)
         }
     }
 
@@ -99,45 +110,24 @@ class LoginFragment: BaseFragment() {
     }
 
 
-    private fun initGoogleSignIn() {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        googleApiClient = context?.let { context ->
-            activity?.let { activity ->
-                GoogleApiClient.Builder(context)
-                    .enableAutoManage(activity) { connectionResult ->
-                        Snackbar.make(requireView(), "Google sign in failed!", Snackbar.LENGTH_SHORT)
-                        Log.d(GOOGLE_LOG_DEBUG, connectionResult.errorMessage.toString())
-                    }
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build()
-            }
-        }!!
-    }
-
-
-    private fun signInWithGoogle() {
-        val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
-        startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST_CODE)
-    }
-
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == GOOGLE_SIGN_IN_REQUEST_CODE) {
-            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-
-            if (result != null && result.isSuccess) result.signInAccount?.let { fbAuthWithGoogle(it) }
+            GoogleSignIn.getSignedInAccountFromIntent(data)
+                .addOnSuccessListener {
+                    fbAuthWithGoogle(it.idToken!!)
+                }
+                .addOnFailureListener { exc ->
+                    Snackbar.make(requireView(), exc.message.toString(), Snackbar.LENGTH_SHORT)
+                    Log.d(GOOGLE_LOG_DEBUG, exc.message.toString())
+                }
         }
     }
 
 
-    private fun fbAuthWithGoogle(account: GoogleSignInAccount) {
-        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+    private fun fbAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
         fbAuth.signInWithCredential(credential)
             .addOnSuccessListener {
                 val fbUser = fbAuth.currentUser
