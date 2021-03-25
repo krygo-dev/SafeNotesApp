@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream
 import java.util.*
 
 
+@Suppress("DEPRECATION")
 class AddNoteActivity : AppCompatActivity() {
 
     private val addNoteViewModel by viewModels<AddNoteViewModel>()
@@ -39,6 +40,38 @@ class AddNoteActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_note)
         setSupportActionBar(findViewById(R.id.appbar))
 
+        if (intent.hasExtra("note")) {
+            val note = intent.getParcelableExtra<Note>("note")
+
+            title_details.setText(note!!.title)
+            note_details.setText(note.content)
+            selectedColor = note.color!!
+            view_color_red.setBackgroundResource(R.drawable.background_note_color_red)
+
+            when (note.color) {
+                "#de5246" -> view_color_red.setBackgroundResource(R.drawable.background_note_color_red_checked)
+                "#fdd835" -> view_color_yellow.setBackgroundResource(R.drawable.background_note_color_yellow_checked)
+                "#3949ab" -> view_color_blue.setBackgroundResource(R.drawable.background_note_color_blue_checked)
+                "#43a047" -> view_color_green.setBackgroundResource(R.drawable.background_note_color_green_checked)
+                "#ffffff" -> view_color_white.setBackgroundResource(R.drawable.background_note_color_white_checked)
+            }
+
+            if (note.image != "") {
+                val stream = ByteArrayOutputStream()
+                val bitmap = Glide.with(this)
+                                    .asBitmap()
+                                    .load(note.image)
+                                    .submit()
+                                    .get()
+                                    .compress(Bitmap.CompressFormat.JPEG, 100, stream)
+
+                Glide.with(this).load(bitmap).into(note_image)
+                note_image.visibility = View.VISIBLE
+                byteArray = stream.toByteArray()
+            }
+
+        }
+
         setOnClicks()
     }
 
@@ -53,7 +86,10 @@ class AddNoteActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
-            R.id.save_menu_item -> addNote()
+            R.id.save_menu_item -> {
+                if (intent.hasExtra("note")) updateNote(intent.getParcelableExtra<Note>("note"))
+                else addNote()
+            }
             R.id.back_menu_item -> onBackPressed()
         }
 
@@ -77,6 +113,33 @@ class AddNoteActivity : AppCompatActivity() {
             }
 
             Toast.makeText(applicationContext, "Note created!", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(applicationContext, HomeScreenActivity::class.java))
+        }
+    }
+
+
+    private fun updateNote(note: Note?) {
+        val title = title_details.text.toString()
+        val content = note_details.text.toString()
+        val color = selectedColor
+
+        if (title == "" || content == "") {
+            Toast.makeText(applicationContext, "Fill title and content fields!", Toast.LENGTH_SHORT).show()
+        } else {
+            val map = mapOf("id" to note!!.id,
+                            "title" to title,
+                            "content" to content,
+                            "image" to "",
+                            "timestamp" to Timestamp(Date()),
+                            "color" to color)
+
+            addNoteViewModel.updateNote(note, map)
+
+            if (byteArray != null) {
+                addNoteViewModel.uploadNotePhoto(byteArray!!, note)
+            }
+
+            Toast.makeText(applicationContext, "Note updated!", Toast.LENGTH_SHORT).show()
             startActivity(Intent(applicationContext, HomeScreenActivity::class.java))
         }
     }

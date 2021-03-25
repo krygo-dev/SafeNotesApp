@@ -16,4 +16,8 @@ class AddNoteViewModel: ViewModel() {
     fun uploadNotePhoto(bytes: ByteArray, note: Note) {
         repository.uploadPhoto(bytes, note)
     }
+
+    fun updateNote(note: Note, map: Map<String, Comparable<*>?>) {
+        repository.updateNote(note, map)
+    }
 }

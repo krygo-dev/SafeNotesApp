@@ -9,7 +9,6 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -18,16 +17,18 @@ import com.krygodev.safenotes.R
 import com.krygodev.safenotes.adapters.NoteAdapter
 import com.krygodev.safenotes.data.Note
 import com.krygodev.safenotes.data.User
+import com.krygodev.safenotes.interfaces.OnNoteItemClick
 import com.krygodev.safenotes.interfaces.OnNoteItemLongClick
 import com.krygodev.safenotes.viewmodels.HomeScreenViewModel
 import kotlinx.android.synthetic.main.activity_home_screen.*
+import java.io.Serializable
 
 
-class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick {
+class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemClick {
 
     private val fbAuth = FirebaseAuth.getInstance()
     private val homeScreenViewModel by viewModels<HomeScreenViewModel>()
-    private val adapter = NoteAdapter(this)
+    private val adapter = NoteAdapter(this, this)
 
     private val HOME_DEBUG = "HOME_SCREEN_DEBUG"
 
@@ -71,7 +72,15 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick {
 
 
     override fun onNoteItemLongClick(note: Note, position: Int) {
-        Toast.makeText(applicationContext, note.title, Toast.LENGTH_LONG).show()
+        homeScreenViewModel.deleteNote(note)
+        Toast.makeText(applicationContext, "Note deleted!", Toast.LENGTH_LONG).show()
+    }
+
+
+    override fun onNoteItemClick(note: Note, position: Int) {
+        val intent = Intent(this, AddNoteActivity::class.java)
+        intent.putExtra("note", note)
+        startActivity(intent)
     }
 
 

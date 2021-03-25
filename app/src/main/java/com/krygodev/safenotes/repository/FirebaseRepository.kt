@@ -104,7 +104,7 @@ class FirebaseRepository {
     }
 
 
-    fun updateNote(note: Note, map: Map<String, String>) {
+    fun updateNote(note: Note, map: Map<String, Comparable<*>?>) {
         fbFirestore.collection("Users")
             .document(uid!!)
             .collection("Notes")
@@ -121,13 +121,29 @@ class FirebaseRepository {
 
     fun uploadPhoto(bytes: ByteArray, note: Note) {
         fbStorage.getReference("notePhotos")
-            .child("${note.id!!}.jpg")
+            .child("${note.id}.jpg")
             .putBytes(bytes)
             .addOnCompleteListener {
                 Log.d(REPO_DEBUG, "Photo uploaded!")
             }
             .addOnSuccessListener {
                 getPhotoURL(it.storage, note)
+            }
+            .addOnFailureListener {
+                Log.d(REPO_DEBUG, it.message.toString())
+            }
+    }
+
+
+    fun deleteNote(note: Note) {
+        deleteNotePhoto(note)
+        fbFirestore.collection("Users")
+            .document(uid!!)
+            .collection("Notes")
+            .document(note.id!!)
+            .delete()
+            .addOnSuccessListener {
+                Log.d(REPO_DEBUG, "Note deleted!")
             }
             .addOnFailureListener {
                 Log.d(REPO_DEBUG, it.message.toString())
@@ -146,4 +162,19 @@ class FirebaseRepository {
     }
 
 
+    private fun deleteNotePhoto(note: Note) {
+        if (note.image != "") {
+            fbStorage.getReference("notePhotos")
+            .child("${note.id}.jpg")
+            .delete()
+            .addOnSuccessListener {
+                Log.d(REPO_DEBUG, "Image deleted!")
+            }
+            .addOnFailureListener {
+                Log.d(REPO_DEBUG, it.message.toString())
+            }
+        } else {
+            Log.d(REPO_DEBUG, "No image to delete!")
+        }
+    }
 }

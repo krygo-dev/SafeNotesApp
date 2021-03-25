@@ -14,10 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.krygodev.safenotes.R
 import com.krygodev.safenotes.data.Note
+import com.krygodev.safenotes.interfaces.OnNoteItemClick
 import com.krygodev.safenotes.interfaces.OnNoteItemLongClick
 
 
-class NoteAdapter(private val listener: OnNoteItemLongClick) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+class NoteAdapter(private val listenerLongClick: OnNoteItemLongClick,
+                  private val listenerClick: OnNoteItemClick) :
+    RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
     private val notesList = ArrayList<Note>()
 
@@ -71,8 +74,14 @@ class NoteAdapter(private val listener: OnNoteItemLongClick) : RecyclerView.Adap
     inner class NoteViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         init {
             view.setOnLongClickListener {
-                listener.onNoteItemLongClick(notesList[adapterPosition], adapterPosition)
+                listenerLongClick.onNoteItemLongClick(notesList[adapterPosition], adapterPosition)
                 true
+            }
+        }
+
+        init {
+            view.setOnClickListener {
+                listenerClick.onNoteItemClick(notesList[adapterPosition], adapterPosition)
             }
         }
     }
