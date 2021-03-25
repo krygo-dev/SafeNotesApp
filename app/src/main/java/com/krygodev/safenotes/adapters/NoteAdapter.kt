@@ -32,6 +32,12 @@ class NoteAdapter(private val listenerLongClick: OnNoteItemLongClick,
     }
 
 
+    fun deleteNote(note: Note, position: Int) {
+        notesList.remove(note)
+        notifyItemRemoved(position)
+    }
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.note_view, parent, false)
@@ -57,10 +63,10 @@ class NoteAdapter(private val listenerLongClick: OnNoteItemLongClick,
         content.text = notesList[holder.adapterPosition].content
 
         if (notesList[holder.adapterPosition].image != "") {
+            image.visibility = View.VISIBLE
             Glide.with(holder.itemView)
                 .load(notesList[holder.adapterPosition].image)
                 .into(image)
-            image.visibility = View.VISIBLE
             Log.d("NOTE_ADAPTER_DEBUG", notesList[holder.adapterPosition].image.toString())
         }
     }

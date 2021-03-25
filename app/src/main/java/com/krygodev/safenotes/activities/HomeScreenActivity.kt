@@ -47,7 +47,7 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
         } )
 
         homeScreenViewModel.userNotes.observe(this, Observer<List<Note>> { list ->
-            adapter.setNotes(list)
+            list?.let { adapter.setNotes(it) }
         })
     }
 
@@ -73,6 +73,7 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
 
     override fun onNoteItemLongClick(note: Note, position: Int) {
         homeScreenViewModel.deleteNote(note)
+        adapter.deleteNote(note, position)
         Toast.makeText(applicationContext, "Note deleted!", Toast.LENGTH_LONG).show()
     }
 
