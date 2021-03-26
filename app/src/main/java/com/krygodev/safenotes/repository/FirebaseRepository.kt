@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.model.Document
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -42,12 +43,16 @@ class FirebaseRepository {
     }
 
 
-    fun getUserNotes(): LiveData<List<Note>> {
+    fun getUserNotes(sort: String): LiveData<List<Note>> {
         val cloudResult = MutableLiveData<List<Note>>()
+        var order = Query.Direction.DESCENDING
+
+        if (sort == "asc") order = Query.Direction.ASCENDING
 
         fbFirestore.collection("Users")
             .document(uid!!)
             .collection("Notes")
+            .orderBy("timestamp", order)
             .get()
             .addOnSuccessListener {
                 val notes = it.toObjects(Note::class.java)

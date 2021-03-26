@@ -12,7 +12,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.type.Date
+import com.google.type.DateTime
 import com.krygodev.safenotes.R
 import com.krygodev.safenotes.adapters.NoteAdapter
 import com.krygodev.safenotes.data.Note
@@ -22,6 +25,7 @@ import com.krygodev.safenotes.interfaces.OnNoteItemLongClick
 import com.krygodev.safenotes.viewmodels.HomeScreenViewModel
 import kotlinx.android.synthetic.main.activity_home_screen.*
 import java.io.Serializable
+import java.sql.Time
 
 
 class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemClick {
@@ -46,8 +50,9 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
             bindUserData(user)
         } )
 
-        homeScreenViewModel.userNotes.observe(this, Observer<List<Note>> { list ->
-            list?.let { adapter.setNotes(it) }
+        homeScreenViewModel.userNotesDesc.observe(this, Observer<List<Note>> { list ->
+            list?.let { notesList ->
+                adapter.setNotes(notesList) }
         })
     }
 
@@ -62,9 +67,9 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
-            R.id.logout_menu_item -> {
-                signOut()
-            }
+            R.id.logout_menu_item -> signOut()
+            R.id.sort_asc_menu_item -> sortByDateAsc()
+            R.id.sort_desc_menu_item -> sortByDateDesc()
         }
 
         return super.onOptionsItemSelected(item)
@@ -98,6 +103,22 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
             flags = (Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         }
         startActivity(intent)
+    }
+
+
+    private fun sortByDateAsc() {
+        homeScreenViewModel.userNotesAsc.observe(this, Observer<List<Note>> { list ->
+            list?.let { notesList ->
+                adapter.setNotes(notesList) }
+        })
+    }
+
+
+    private fun sortByDateDesc() {
+        homeScreenViewModel.userNotesDesc.observe(this, Observer<List<Note>> { list ->
+            list?.let { notesList ->
+                adapter.setNotes(notesList) }
+        })
     }
 
 

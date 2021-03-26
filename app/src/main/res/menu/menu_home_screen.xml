@@ -3,6 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/sort_asc_menu_item"
+        android:title="@string/sortByDateAsc"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_arrow_up" />
+
+    <item
+        android:id="@+id/sort_desc_menu_item"
+        android:title="@string/sortByDateDesc"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_arrow_down"/>
+
+    <item
         android:id="@+id/logout_menu_item"
         android:title="@string/logout"
         app:showAsAction="never" />

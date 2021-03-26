@@ -21,4 +21,6 @@
     <string name="noteImage">Note image</string>
     <string name="resetPassword">Reset password</string>
     <string name="resetPasswordText">Enter your email address</string>
+    <string name="sortByDateAsc">Date ascending</string>
+    <string name="sortByDateDesc">Date descending</string>
 </resources>

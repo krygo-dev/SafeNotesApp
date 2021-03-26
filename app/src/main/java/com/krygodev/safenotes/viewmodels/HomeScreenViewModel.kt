@@ -10,8 +10,8 @@ class HomeScreenViewModel: ViewModel() {
     private val repository = FirebaseRepository()
 
     val user = repository.getUserData()
-    val userNotes = repository.getUserNotes()
-
+    val userNotesDesc = repository.getUserNotes("desc")
+    val userNotesAsc = repository.getUserNotes("asc")
 
     fun deleteNote(note: Note) {
         repository.deleteNote(note)
