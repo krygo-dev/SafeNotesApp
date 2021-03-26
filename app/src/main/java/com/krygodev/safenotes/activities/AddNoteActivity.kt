@@ -3,6 +3,7 @@ package com.krygodev.safenotes.activities
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +15,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import com.bumptech.glide.Glide
 import com.google.firebase.Timestamp
 import com.krygodev.safenotes.R
@@ -21,6 +23,7 @@ import com.krygodev.safenotes.data.Note
 import com.krygodev.safenotes.viewmodels.AddNoteViewModel
 import kotlinx.android.synthetic.main.activity_add_note.*
 import java.io.ByteArrayOutputStream
+import java.nio.ByteBuffer
 import java.util.*
 
 
@@ -57,17 +60,8 @@ class AddNoteActivity : AppCompatActivity() {
             }
 
             if (note.image != "") {
-                val stream = ByteArrayOutputStream()
-                val bitmap = Glide.with(this)
-                                    .asBitmap()
-                                    .load(note.image)
-                                    .submit()
-                                    .get()
-                                    .compress(Bitmap.CompressFormat.JPEG, 100, stream)
-
-                Glide.with(this).load(bitmap).into(note_image)
+                Glide.with(this).load(note.image).into(note_image)
                 note_image.visibility = View.VISIBLE
-                byteArray = stream.toByteArray()
             }
 
         }
@@ -129,13 +123,14 @@ class AddNoteActivity : AppCompatActivity() {
             val map = mapOf("id" to note!!.id,
                             "title" to title,
                             "content" to content,
-                            "image" to "",
+                            "image" to note.image,
                             "timestamp" to Timestamp(Date()),
                             "color" to color)
 
             addNoteViewModel.updateNote(note, map)
 
             if (byteArray != null) {
+                addNoteViewModel.deleteNotePhoto(note)
                 addNoteViewModel.uploadNotePhoto(byteArray!!, note)
             }
 

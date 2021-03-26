@@ -151,6 +151,23 @@ class FirebaseRepository {
     }
 
 
+    fun deleteNotePhoto(note: Note) {
+        if (note.image != "") {
+            fbStorage.getReference("notePhotos")
+                .child("${note.id}.jpg")
+                .delete()
+                .addOnSuccessListener {
+                    Log.d(REPO_DEBUG, "Image deleted!")
+                }
+                .addOnFailureListener {
+                    Log.d(REPO_DEBUG, it.message.toString())
+                }
+        } else {
+            Log.d(REPO_DEBUG, "No image to delete!")
+        }
+    }
+
+
     private fun getPhotoURL(storage: StorageReference, note: Note) {
         storage.downloadUrl
             .addOnSuccessListener {
@@ -159,22 +176,5 @@ class FirebaseRepository {
             .addOnFailureListener {
                 Log.d(REPO_DEBUG, it.message.toString())
             }
-    }
-
-
-    private fun deleteNotePhoto(note: Note) {
-        if (note.image != "") {
-            fbStorage.getReference("notePhotos")
-            .child("${note.id}.jpg")
-            .delete()
-            .addOnSuccessListener {
-                Log.d(REPO_DEBUG, "Image deleted!")
-            }
-            .addOnFailureListener {
-                Log.d(REPO_DEBUG, it.message.toString())
-            }
-        } else {
-            Log.d(REPO_DEBUG, "No image to delete!")
-        }
     }
 }

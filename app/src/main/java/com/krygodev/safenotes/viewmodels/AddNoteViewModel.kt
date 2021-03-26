@@ -20,4 +20,8 @@ class AddNoteViewModel: ViewModel() {
     fun updateNote(note: Note, map: Map<String, Comparable<*>?>) {
         repository.updateNote(note, map)
     }
+
+    fun deleteNotePhoto(note: Note) {
+        repository.deleteNotePhoto(note)
+    }
 }
