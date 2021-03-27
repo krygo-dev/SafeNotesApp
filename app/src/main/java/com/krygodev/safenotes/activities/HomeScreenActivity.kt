@@ -25,6 +25,7 @@ import com.krygodev.safenotes.interfaces.OnNoteItemLongClick
 import com.krygodev.safenotes.viewmodels.HomeScreenViewModel
 import kotlinx.android.synthetic.main.activity_home_screen.*
 import kotlinx.android.synthetic.main.bottom_sheet_home_screen.*
+import java.util.ArrayList
 
 
 class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemClick {
@@ -153,7 +154,14 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
 
 
     private fun shareNote(note: Note) {
-        Toast.makeText(applicationContext, "Note shared!", Toast.LENGTH_SHORT).show()
+
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "Title: ${note.title} \nContent: ${note.content} \n${note.image}")
+            type = "text/plain"
+        }
+
+        startActivity(Intent.createChooser(shareIntent, "Share"))
     }
 
 
