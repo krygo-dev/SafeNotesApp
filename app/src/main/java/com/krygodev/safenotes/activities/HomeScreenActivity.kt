@@ -24,8 +24,6 @@ import com.krygodev.safenotes.interfaces.OnNoteItemClick
 import com.krygodev.safenotes.interfaces.OnNoteItemLongClick
 import com.krygodev.safenotes.viewmodels.HomeScreenViewModel
 import kotlinx.android.synthetic.main.activity_home_screen.*
-import kotlinx.android.synthetic.main.bottom_sheet_home_screen.*
-import java.util.ArrayList
 
 
 class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemClick {

@@ -3,19 +3,18 @@ package com.krygodev.safenotes.activities
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
 import com.bumptech.glide.Glide
 import com.google.firebase.Timestamp
 import com.krygodev.safenotes.R
@@ -23,7 +22,6 @@ import com.krygodev.safenotes.data.Note
 import com.krygodev.safenotes.viewmodels.AddNoteViewModel
 import kotlinx.android.synthetic.main.activity_add_note.*
 import java.io.ByteArrayOutputStream
-import java.nio.ByteBuffer
 import java.util.*
 
 
@@ -81,7 +79,7 @@ class AddNoteActivity : AppCompatActivity() {
 
         when (item.itemId) {
             R.id.save_menu_item -> {
-                if (intent.hasExtra("note")) updateNote(intent.getParcelableExtra<Note>("note"))
+                if (intent.hasExtra("note")) updateNote(intent.getParcelableExtra("note"))
                 else addNote()
             }
             R.id.back_menu_item -> onBackPressed()
@@ -104,10 +102,10 @@ class AddNoteActivity : AppCompatActivity() {
 
             if (byteArray != null) {
                 addNoteViewModel.uploadNotePhoto(byteArray!!, note)
+                createProgressDialog()
+            } else {
+                backToHomeScreen.run()
             }
-
-            Toast.makeText(applicationContext, "Note created!", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(applicationContext, HomeScreenActivity::class.java))
         }
     }
 
@@ -132,11 +130,28 @@ class AddNoteActivity : AppCompatActivity() {
             if (byteArray != null) {
                 addNoteViewModel.deleteNotePhoto(note)
                 addNoteViewModel.uploadNotePhoto(byteArray!!, note)
+                createProgressDialog()
+            } else {
+                backToHomeScreen.run()
             }
-
-            Toast.makeText(applicationContext, "Note updated!", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(applicationContext, HomeScreenActivity::class.java))
         }
+    }
+
+
+    private fun createProgressDialog() {
+        AlertDialog.Builder(this)
+            .setCancelable(false)
+            .setView(R.layout.progress_dialog)
+            .create()
+            .show()
+
+        Handler().postDelayed(backToHomeScreen, 3000)
+    }
+
+
+    private val backToHomeScreen = Runnable {
+        Toast.makeText(applicationContext, "Note created!", Toast.LENGTH_SHORT).show()
+        startActivity(Intent(applicationContext, HomeScreenActivity::class.java))
     }
 
 

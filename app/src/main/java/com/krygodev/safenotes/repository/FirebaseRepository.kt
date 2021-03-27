@@ -1,14 +1,11 @@
 package com.krygodev.safenotes.repository
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.model.Document
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.krygodev.safenotes.data.Note
@@ -132,10 +129,15 @@ class FirebaseRepository {
                 Log.d(REPO_DEBUG, "Photo uploaded!")
             }
             .addOnSuccessListener {
-                getPhotoURL(it.storage, note)
+                getPhotoURL(it!!.storage, note)
             }
             .addOnFailureListener {
                 Log.d(REPO_DEBUG, it.message.toString())
+            }
+            .addOnProgressListener { task ->
+                val progress = (100.0 * task.bytesTransferred) / task.totalByteCount
+                Log.d("UPLOAD", "Upload is $progress% done")
+
             }
     }
 

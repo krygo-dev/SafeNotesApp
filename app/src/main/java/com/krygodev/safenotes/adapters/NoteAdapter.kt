@@ -62,6 +62,8 @@ class NoteAdapter(private val listenerLongClick: OnNoteItemLongClick,
         title.text = notesList[holder.adapterPosition].title
         content.text = notesList[holder.adapterPosition].content
 
+        Log.d("NOTE: ", notesList[holder.adapterPosition].toString())
+
         if (notesList[holder.adapterPosition].image != "") {
             image.visibility = View.VISIBLE
             Glide.with(holder.itemView)
