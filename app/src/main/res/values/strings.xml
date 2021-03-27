@@ -23,4 +23,6 @@
     <string name="resetPasswordText">Enter your email address</string>
     <string name="sortByDateAsc">Date ascending</string>
     <string name="sortByDateDesc">Date descending</string>
+    <string name="bottomSheetMess">What you want to do?</string>
+    <string name="delete">Delete</string>
 </resources>

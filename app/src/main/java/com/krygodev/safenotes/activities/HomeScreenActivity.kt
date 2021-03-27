@@ -1,21 +1,21 @@
 package com.krygodev.safenotes.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.Timestamp
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
-import com.google.type.Date
-import com.google.type.DateTime
 import com.krygodev.safenotes.R
 import com.krygodev.safenotes.adapters.NoteAdapter
 import com.krygodev.safenotes.data.Note
@@ -24,8 +24,7 @@ import com.krygodev.safenotes.interfaces.OnNoteItemClick
 import com.krygodev.safenotes.interfaces.OnNoteItemLongClick
 import com.krygodev.safenotes.viewmodels.HomeScreenViewModel
 import kotlinx.android.synthetic.main.activity_home_screen.*
-import java.io.Serializable
-import java.sql.Time
+import kotlinx.android.synthetic.main.bottom_sheet_home_screen.*
 
 
 class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemClick {
@@ -76,10 +75,26 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
     }
 
 
+    @SuppressLint("InflateParams")
     override fun onNoteItemLongClick(note: Note, position: Int) {
-        homeScreenViewModel.deleteNote(note)
-        adapter.deleteNote(note, position)
-        Toast.makeText(applicationContext, "Note deleted!", Toast.LENGTH_LONG).show()
+        val bottomSheetDialog = BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_home_screen, null, false)
+
+        val delete = view.findViewById<ImageView>(R.id.bottom_sheet_delete)
+        val share = view.findViewById<ImageView>(R.id.bottom_sheet_share)
+
+        delete.setOnClickListener {
+            deleteNote(note, position)
+            bottomSheetDialog.dismiss()
+        }
+
+        share.setOnClickListener {
+            shareNote(note)
+            bottomSheetDialog.dismiss()
+        }
+
+        bottomSheetDialog.setContentView(view)
+        bottomSheetDialog.show()
     }
 
 
@@ -127,6 +142,18 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
             val intent = Intent(applicationContext, AddNoteActivity::class.java)
             startActivity(intent)
         }
+    }
+
+
+    private fun deleteNote(note: Note, position: Int) {
+        homeScreenViewModel.deleteNote(note)
+        adapter.deleteNote(note, position)
+        Toast.makeText(applicationContext, "Note deleted!", Toast.LENGTH_LONG).show()
+    }
+
+
+    private fun shareNote(note: Note) {
+        Toast.makeText(applicationContext, "Note shared!", Toast.LENGTH_SHORT).show()
     }
 
 
