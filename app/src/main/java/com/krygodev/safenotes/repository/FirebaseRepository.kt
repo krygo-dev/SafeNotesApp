@@ -70,19 +70,6 @@ class FirebaseRepository {
     }
 
 
-    fun updateUserName(map: Map<String, String>) {
-        fbFirestore.collection("Users")
-            .document(uid!!)
-            .update(map)
-            .addOnSuccessListener {
-                Log.d(REPO_DEBUG, "Username updated!")
-            }
-            .addOnFailureListener {
-                Log.d(REPO_DEBUG, it.message.toString())
-            }
-    }
-
-
     fun createNewNote(note: Note) {
         val noteID = fbFirestore.collection("Users")
             .document(uid!!)

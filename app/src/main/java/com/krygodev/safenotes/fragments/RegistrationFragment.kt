@@ -39,11 +39,12 @@ class RegistrationFragment: BaseFragment() {
 
     private fun createAccountClick() {
         create_account_button.setOnClickListener {
+            val username = reg_username_input.text?.trim().toString()
             val email = reg_email_input.text?.trim().toString()
             val password = reg_password_input.text?.trim().toString()
             val repeatPassword = reg_repeat_password_input.text?.trim().toString()
 
-            if (email == "" || password == "" || repeatPassword == "")
+            if (username == "" || email == "" || password == "" || repeatPassword == "")
                 Snackbar.make(requireView(), "Fill in blank fields!", Snackbar.LENGTH_SHORT).show()
             else {
 
@@ -54,9 +55,11 @@ class RegistrationFragment: BaseFragment() {
                             fbUser!!.sendEmailVerification()
                                 .addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
-                                        val user = User(fbUser.uid, "", fbUser.email)
+                                        val user = User(fbUser.uid, username, fbUser.email)
                                         registrationViewModel.createNewUser(user)
-                                        Toast.makeText(context, "Account created! Verify your email address!", Toast.LENGTH_LONG).show()
+                                        Toast.makeText(context,
+                                            "Account created! Verify your email address!",
+                                            Toast.LENGTH_LONG).show()
                                         Log.d(EMAIL_VERIFICATION_DEBUG, "Email sent!")
                                         fbAuth.signOut()
                                         restartApp()

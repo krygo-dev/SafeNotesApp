@@ -14,7 +14,10 @@
         <item name="overlapAnchor">false</item>
         <item name="android:dropDownVerticalOffset">5.0dp</item>
         <item name="android:dropDownHorizontalOffset">5.0dp</item>
-        <item name="android:popupBackground">@color/colorPrimaryDark</item>
+        <item name="android:popupBackground">@color/colorPrimary</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="AccentWhite" parent="AppTheme">
