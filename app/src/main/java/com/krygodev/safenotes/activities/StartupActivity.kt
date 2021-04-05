@@ -22,6 +22,7 @@ class StartupActivity : AppCompatActivity() {
         isCurrentUser()
     }
 
+
     private fun isCurrentUser() {
         fbAuth.currentUser?.let {
             val intent = Intent(applicationContext, HomeScreenActivity::class.java).apply {

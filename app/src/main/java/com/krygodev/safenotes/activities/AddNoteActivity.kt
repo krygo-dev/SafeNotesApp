@@ -141,7 +141,7 @@ class AddNoteActivity : AppCompatActivity() {
     private fun createProgressDialog() {
         AlertDialog.Builder(this)
             .setCancelable(false)
-            .setView(R.layout.progress_dialog)
+            .setView(R.layout.progress_dialog_upload_photo)
             .create()
             .show()
 

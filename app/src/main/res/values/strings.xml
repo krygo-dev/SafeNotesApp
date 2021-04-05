@@ -27,4 +27,5 @@
     <string name="delete">Delete</string>
     <string name="uploadingPhoto">Uploading photo</string>
     <string name="username">Username</string>
+    <string name="signingIn">Signing in…</string>
 </resources>

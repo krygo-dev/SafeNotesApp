@@ -9,15 +9,16 @@
     android:background="@color/darkGrey" >
 
     <ProgressBar
-        android:id="@+id/loader"
+        android:id="@+id/loader_login"
         android:layout_marginEnd="5dp"
         android:layout_width="45dp"
         android:layout_height="45dp"
+        android:layout_marginStart="100dp"
         android:layout_gravity="center_vertical" />
 
     <TextView
         android:layout_width="wrap_content"
-        android:text="@string/uploadingPhoto"
+        android:text="@string/signingIn"
         android:layout_gravity="center_vertical"
         android:gravity="center"
         android:id="@+id/loading_msg"

@@ -1,15 +1,11 @@
 package com.krygodev.safenotes.activities
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.AttributeSet
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -126,18 +122,12 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
 
 
     private fun sortByDateAsc() {
-        homeScreenViewModel.userNotesAsc.observe(this, Observer<List<Note>> { list ->
-            list?.let { notesList ->
-                adapter.setNotes(notesList) }
-        })
+        adapter.setNotes(homeScreenViewModel.userNotesAsc.value!!)
     }
 
 
     private fun sortByDateDesc() {
-        homeScreenViewModel.userNotesDesc.observe(this, Observer<List<Note>> { list ->
-            list?.let { notesList ->
-                adapter.setNotes(notesList) }
-        })
+        adapter.setNotes(homeScreenViewModel.userNotesDesc.value!!)
     }
 
 

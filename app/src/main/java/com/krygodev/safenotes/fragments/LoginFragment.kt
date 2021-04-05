@@ -2,10 +2,13 @@ package com.krygodev.safenotes.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -15,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.krygodev.safenotes.R
+import com.krygodev.safenotes.activities.HomeScreenActivity
 import com.krygodev.safenotes.data.User
 import com.krygodev.safenotes.viewmodels.LoginViewModel
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -72,7 +76,7 @@ class LoginFragment: BaseFragment() {
                 fbAuth.signInWithEmailAndPassword(email, password)
                     .addOnSuccessListener { authResult ->
                         val user = authResult.user!!
-                        if (user.isEmailVerified) startApp()
+                        if (user.isEmailVerified) createProgressDialog()
                         else Snackbar.make(requireView(), "Verify your email address!", Snackbar.LENGTH_SHORT).show()
                     }
                     .addOnFailureListener { exc ->
@@ -133,11 +137,27 @@ class LoginFragment: BaseFragment() {
                 val fbUser = fbAuth.currentUser
                 val user = User(fbUser!!.uid, fbUser.displayName!!.substring(0, fbUser.displayName!!.indexOf(" ")), fbUser.email)
                 loginViewModel.createNewGoogleSignInUser(user)
-                startApp()
+                createProgressDialog()
             }
             .addOnFailureListener { exc ->
                 Snackbar.make(requireView(), exc.message.toString(), Snackbar.LENGTH_SHORT)
                 Log.d(GOOGLE_LOG_DEBUG, exc.message.toString())
             }
+    }
+
+
+    private fun createProgressDialog() {
+        AlertDialog.Builder(requireContext())
+            .setCancelable(false)
+            .setView(R.layout.progress_dialog_login)
+            .create()
+            .show()
+
+        Handler().postDelayed(signIn, 1500)
+    }
+
+
+    private val signIn = Runnable {
+        startApp()
     }
 }
