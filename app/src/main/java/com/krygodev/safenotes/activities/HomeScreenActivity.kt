@@ -142,7 +142,7 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
     private fun deleteNote(note: Note, position: Int) {
         homeScreenViewModel.deleteNote(note)
         adapter.deleteNote(note, position)
-        Toast.makeText(applicationContext, "Note deleted!", Toast.LENGTH_LONG).show()
+        Snackbar.make(recycler_view_home_screen, "Note deleted!", Snackbar.LENGTH_LONG).show()
     }
 
 
@@ -159,6 +159,7 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
 
 
     private fun bindUserData(user: User?) {
+        Snackbar.make(recycler_view_home_screen, "Signed in as ${user!!.name}", Snackbar.LENGTH_SHORT).show()
         Log.d(HOME_DEBUG, user.toString())
     }
 }

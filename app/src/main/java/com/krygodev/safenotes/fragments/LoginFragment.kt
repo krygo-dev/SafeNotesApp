@@ -17,6 +17,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.krygodev.safenotes.R
 import com.krygodev.safenotes.activities.HomeScreenActivity
 import com.krygodev.safenotes.data.User
@@ -29,6 +32,8 @@ class LoginFragment: BaseFragment() {
 
     private lateinit var fbAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+
+    private val fbFirestore = FirebaseFirestore.getInstance()
 
     private val loginViewModel by viewModels<LoginViewModel>()
 
