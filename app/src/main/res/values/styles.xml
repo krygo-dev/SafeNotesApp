@@ -6,6 +6,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorHint">@color/white</item>
         <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:windowBackground">@drawable/splash_screen_background</item>
     </style>
 
     <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
