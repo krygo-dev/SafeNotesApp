@@ -21,7 +21,7 @@
             android:animateLayoutChanges="true">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/appbar"
+                android:id="@+id/appbar_add_note"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
@@ -39,7 +39,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/note_details_input_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appbar"
+                app:layout_constraintTop_toBottomOf="@+id/appbar_add_note"
                 android:layout_marginHorizontal="10dp"
                 android:theme="@style/AccentWhite" >
 

@@ -38,7 +38,7 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_screen)
-        setSupportActionBar(findViewById(R.id.appbar))
+        setSupportActionBar(findViewById(R.id.appbar_home_screen))
 
         addNewNote()
 
@@ -159,7 +159,7 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
 
 
     private fun bindUserData(user: User?) {
-        Snackbar.make(recycler_view_home_screen, "Signed in as ${user!!.name}", Snackbar.LENGTH_SHORT).show()
+        supportActionBar?.title = "Welcome ${user?.name}"
         Log.d(HOME_DEBUG, user.toString())
     }
 }

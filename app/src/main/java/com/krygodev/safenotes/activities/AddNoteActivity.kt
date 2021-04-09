@@ -39,7 +39,9 @@ class AddNoteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_note)
-        setSupportActionBar(findViewById(R.id.appbar))
+        setSupportActionBar(findViewById(R.id.appbar_add_note))
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         if (intent.hasExtra("note")) {
             val note = intent.getParcelableExtra<Note>("note")
@@ -68,6 +70,12 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
 
+    // Back to previous activity functionality
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
     // Menu functionality
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_add_note, menu)
@@ -82,7 +90,6 @@ class AddNoteActivity : AppCompatActivity() {
                 if (intent.hasExtra("note")) updateNote(intent.getParcelableExtra("note"))
                 else addNote()
             }
-            R.id.back_menu_item -> onBackPressed()
         }
 
         return super.onOptionsItemSelected(item)
