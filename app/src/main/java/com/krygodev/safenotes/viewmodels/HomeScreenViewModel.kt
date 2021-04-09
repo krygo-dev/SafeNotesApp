@@ -5,6 +5,7 @@ import com.krygodev.safenotes.data.Note
 import com.krygodev.safenotes.repository.FirebaseRepository
 
 
+// ViewModel for HomeScreen Activity
 class HomeScreenViewModel: ViewModel() {
 
     private val repository = FirebaseRepository()

@@ -1,7 +1,5 @@
 package com.krygodev.safenotes.adapters
 
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.krygodev.safenotes.R
@@ -18,6 +15,7 @@ import com.krygodev.safenotes.interfaces.OnNoteItemClick
 import com.krygodev.safenotes.interfaces.OnNoteItemLongClick
 
 
+// Adapter to recyclerview
 class NoteAdapter(private val listenerLongClick: OnNoteItemLongClick,
                   private val listenerClick: OnNoteItemClick) :
     RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
@@ -25,6 +23,7 @@ class NoteAdapter(private val listenerLongClick: OnNoteItemLongClick,
     private val notesList = ArrayList<Note>()
 
 
+    // Setting notes
     fun setNotes(list: List<Note>) {
         notesList.clear()
         notesList.addAll(list)
@@ -32,12 +31,14 @@ class NoteAdapter(private val listenerLongClick: OnNoteItemLongClick,
     }
 
 
+    // Deleting note
     fun deleteNote(note: Note, position: Int) {
         notesList.remove(note)
         notifyItemRemoved(position)
     }
 
 
+    // Setting up ViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.note_view, parent, false)
@@ -45,6 +46,7 @@ class NoteAdapter(private val listenerLongClick: OnNoteItemLongClick,
     }
 
 
+    // Binding data to ViewHolder
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         val noteView = holder.itemView.findViewById<ConstraintLayout>(R.id.note_card_view)
         val title = holder.itemView.findViewById<TextView>(R.id.title_card_view)
@@ -64,6 +66,7 @@ class NoteAdapter(private val listenerLongClick: OnNoteItemLongClick,
 
         Log.d("NOTE: ", notesList[holder.adapterPosition].toString())
 
+        // Loading note image
         if (notesList[holder.adapterPosition].image != "") {
             image.visibility = View.VISIBLE
             Glide.with(holder.itemView)
@@ -79,6 +82,7 @@ class NoteAdapter(private val listenerLongClick: OnNoteItemLongClick,
     }
 
 
+    // Inner class responsible for holding onClicks
     inner class NoteViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         init {
             view.setOnLongClickListener {

@@ -5,6 +5,7 @@ import com.krygodev.safenotes.data.User
 import com.krygodev.safenotes.repository.FirebaseRepository
 
 
+// ViewModel for Login Fragment
 class LoginViewModel: ViewModel() {
 
     private val repository = FirebaseRepository()

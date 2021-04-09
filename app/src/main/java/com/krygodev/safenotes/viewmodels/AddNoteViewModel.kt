@@ -5,6 +5,7 @@ import com.krygodev.safenotes.data.Note
 import com.krygodev.safenotes.repository.FirebaseRepository
 
 
+// ViewModel for AddNote Activity
 class AddNoteViewModel: ViewModel() {
 
     private val repository = FirebaseRepository()

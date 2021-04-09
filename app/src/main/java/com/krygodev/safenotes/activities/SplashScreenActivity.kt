@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.os.Handler
 import com.krygodev.safenotes.R
 
+
+// Activity responsible for showing splash screen
 class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

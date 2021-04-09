@@ -12,6 +12,7 @@ import com.krygodev.safenotes.R
 import kotlinx.android.synthetic.main.fragment_reset_password.*
 
 
+// Fragment responsible for resetting user account password
 class ResetPasswordFragment: BaseFragment() {
 
     private val fbAuth = FirebaseAuth.getInstance()
@@ -32,6 +33,7 @@ class ResetPasswordFragment: BaseFragment() {
     }
 
 
+    // Sending email with reset password link
     private fun resetPasswordClick() {
         reset_password_button.setOnClickListener {
             val email = reset_password_email_input.text?.trim().toString()

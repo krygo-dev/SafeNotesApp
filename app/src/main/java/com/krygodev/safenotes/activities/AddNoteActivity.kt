@@ -25,11 +25,13 @@ import java.io.ByteArrayOutputStream
 import java.util.*
 
 
+// Activity responsible for handling adding new note and updating selected note
 @Suppress("DEPRECATION")
 class AddNoteActivity : AppCompatActivity() {
 
     private val addNoteViewModel by viewModels<AddNoteViewModel>()
 
+    // Variables holding selected color and photo
     private var selectedColor = "#de5246"
     private var byteArray: ByteArray? = null
 
@@ -39,10 +41,13 @@ class AddNoteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_note)
+
+        // Setting up custom AppBar
         setSupportActionBar(findViewById(R.id.appbar_add_note))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
+        // Handling taking data from Intent
         if (intent.hasExtra("note")) {
             val note = intent.getParcelableExtra<Note>("note")
 
@@ -76,6 +81,7 @@ class AddNoteActivity : AppCompatActivity() {
         return true
     }
 
+
     // Menu functionality
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_add_note, menu)
@@ -83,6 +89,7 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
 
+    // Menu clicks functionality
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
@@ -96,6 +103,7 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
 
+    // Add note functionality
     private fun addNote() {
         val title = title_details.text.toString()
         val content = note_details.text.toString()
@@ -109,6 +117,7 @@ class AddNoteActivity : AppCompatActivity() {
 
             if (byteArray != null) {
                 addNoteViewModel.uploadNotePhoto(byteArray!!, note)
+                // "Uploading photo" progress dialog
                 createProgressDialog()
             } else {
                 backToHomeScreen.run()
@@ -117,6 +126,7 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
 
+    // Update note functionality
     private fun updateNote(note: Note?) {
         val title = title_details.text.toString()
         val content = note_details.text.toString()
@@ -135,6 +145,7 @@ class AddNoteActivity : AppCompatActivity() {
             addNoteViewModel.updateNote(note, map)
 
             if (byteArray != null) {
+                // Deleting old and uploading new photo
                 addNoteViewModel.deleteNotePhoto(note)
                 addNoteViewModel.uploadNotePhoto(byteArray!!, note)
                 createProgressDialog()
@@ -145,6 +156,7 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
 
+    // Progress dialog builder
     private fun createProgressDialog() {
         AlertDialog.Builder(this)
             .setCancelable(false)
@@ -156,12 +168,15 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
 
+    // Runnable responsible for backing to home screen
     private val backToHomeScreen = Runnable {
         Toast.makeText(applicationContext, "Note created!", Toast.LENGTH_SHORT).show()
         startActivity(Intent(applicationContext, HomeScreenActivity::class.java))
     }
 
 
+    // Function setting up all onClicks on buttons
+    // Colors and photo
     private fun setOnClicks() {
         view_color_red.setOnClickListener {
             selectedColor = "#de5246"
@@ -223,18 +238,21 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
 
+    // Function creating intent to MediaStore
     private fun selectImage() {
         val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(gallery, REQUEST_CODE_SELECT_IMAGE)
     }
 
 
+    // Get result from selectImage function
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_SELECT_IMAGE && resultCode == RESULT_OK) {
             val image = data?.data
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, image)
 
+            // Loading image into note_image image view with Glide library
             Glide.with(this)
                 .load(image)
                 .into(note_image)
@@ -248,6 +266,7 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
 
+    // Requesting permissions to MediaStore
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,

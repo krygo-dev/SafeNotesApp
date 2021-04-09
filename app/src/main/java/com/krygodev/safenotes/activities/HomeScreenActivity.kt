@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -27,6 +26,7 @@ import com.krygodev.safenotes.viewmodels.HomeScreenViewModel
 import kotlinx.android.synthetic.main.activity_home_screen.*
 
 
+// Activity showing home screen with user notes
 class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemClick {
 
     private val fbAuth = FirebaseAuth.getInstance()
@@ -38,17 +38,22 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_screen)
+
+        // Setting up custom AppBar
         setSupportActionBar(findViewById(R.id.appbar_home_screen))
 
         addNewNote()
 
+        // Setting up recyclerview layout and adapter
         recycler_view_home_screen.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recycler_view_home_screen.adapter = adapter
 
+        // Receiving user data from ViewModel
         homeScreenViewModel.user.observe(this, Observer<User> { user ->
             bindUserData(user)
         } )
 
+        // Receiving user notes from ViewModel
         homeScreenViewModel.userNotesDesc.observe(this, Observer<List<Note>> { list ->
             list?.let { notesList ->
                 adapter.setNotes(notesList) }
@@ -63,6 +68,7 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
     }
 
 
+    // Menu clicks functionality
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
@@ -75,8 +81,10 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
     }
 
 
+    // Setting up long clicks on note
     @SuppressLint("InflateParams")
     override fun onNoteItemLongClick(note: Note, position: Int) {
+        // Setting up bottom sheet dialog
         val bottomSheetDialog = BottomSheetDialog(this)
         val view = layoutInflater.inflate(R.layout.bottom_sheet_home_screen, null, false)
 
@@ -98,6 +106,7 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
     }
 
 
+    // Setting up regular click on note
     override fun onNoteItemClick(note: Note, position: Int) {
         val intent = Intent(this, AddNoteActivity::class.java)
         intent.putExtra("note", note)
@@ -105,6 +114,7 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
     }
 
 
+    // Sign out functionality
     private fun signOut() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -158,6 +168,7 @@ class HomeScreenActivity : AppCompatActivity(), OnNoteItemLongClick, OnNoteItemC
     }
 
 
+    // Showing username on AppBar
     private fun bindUserData(user: User?) {
         supportActionBar?.title = "Welcome ${user?.name}"
         Log.d(HOME_DEBUG, user.toString())

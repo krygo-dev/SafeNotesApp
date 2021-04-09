@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -17,23 +16,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import com.krygodev.safenotes.R
-import com.krygodev.safenotes.activities.HomeScreenActivity
 import com.krygodev.safenotes.data.User
 import com.krygodev.safenotes.viewmodels.LoginViewModel
 import kotlinx.android.synthetic.main.fragment_login.*
 
 
+// Main screen showing after splash screen if user is not logged in
+// Responsible for holding signing in, registration and resetting password
 @Suppress("DEPRECATION")
 class LoginFragment: BaseFragment() {
 
     private lateinit var fbAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-
-    private val fbFirestore = FirebaseFirestore.getInstance()
 
     private val loginViewModel by viewModels<LoginViewModel>()
 
@@ -53,11 +48,11 @@ class LoginFragment: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Setting onClicks
         loginClick()
         googleSignInClick()
         registrationClick()
         resetPasswordClick()
-
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -70,6 +65,7 @@ class LoginFragment: BaseFragment() {
     }
 
 
+    // Holding login with email and password
     private fun loginClick() {
         login_button.setOnClickListener {
             val email = email_address_input.text?.trim().toString()
@@ -93,6 +89,7 @@ class LoginFragment: BaseFragment() {
     }
 
 
+    // Creating GoogleSignIn intent
     private fun googleSignInClick() {
         sign_in_google_button.setOnClickListener {
             val signInIntent = googleSignInClient.signInIntent
@@ -101,6 +98,7 @@ class LoginFragment: BaseFragment() {
     }
 
 
+    // Navigate to Registration Fragment
     private fun registrationClick() {
         register_button.setOnClickListener {
             findNavController()
@@ -110,6 +108,7 @@ class LoginFragment: BaseFragment() {
     }
 
 
+    // Navigate to Reset Password Fragment
     private fun resetPasswordClick() {
         reset_password.setOnClickListener {
             findNavController()
@@ -119,6 +118,7 @@ class LoginFragment: BaseFragment() {
     }
 
 
+    // Getting result from GoogleSignIn intent
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -135,6 +135,7 @@ class LoginFragment: BaseFragment() {
     }
 
 
+    // Signing in with Google credentials and creating new user in FireStore
     private fun fbAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         fbAuth.signInWithCredential(credential)
@@ -151,6 +152,7 @@ class LoginFragment: BaseFragment() {
     }
 
 
+    // Sign in progress dialog builder
     private fun createProgressDialog() {
         AlertDialog.Builder(requireContext())
             .setCancelable(false)

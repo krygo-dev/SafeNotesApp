@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import com.krygodev.safenotes.activities.HomeScreenActivity
 import com.krygodev.safenotes.activities.StartupActivity
 
+
+// Fragment sharing methods to inheriting fragments
 abstract class BaseFragment: Fragment(){
 
     protected fun startApp() {

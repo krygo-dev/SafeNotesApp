@@ -12,8 +12,10 @@ import com.krygodev.safenotes.data.Note
 import com.krygodev.safenotes.data.User
 
 
+// Class responsible for integration with Firebase
 class FirebaseRepository {
 
+    // Firebase services instances
     private val fbStorage = FirebaseStorage.getInstance()
     private val fbAuth = FirebaseAuth.getInstance()
     private val fbFirestore = FirebaseFirestore.getInstance()
@@ -22,6 +24,7 @@ class FirebaseRepository {
     private val REPO_DEBUG = "REPOSITORY_DEBUG"
 
 
+    // Getting user data from Firestore
     fun getUserData(): LiveData<User> {
         val cloudResult = MutableLiveData<User>()
 
@@ -40,6 +43,7 @@ class FirebaseRepository {
     }
 
 
+    // Getting user notes from Firestore
     fun getUserNotes(sort: String): LiveData<List<Note>> {
         val cloudResult = MutableLiveData<List<Note>>()
         var order = Query.Direction.DESCENDING
@@ -71,12 +75,14 @@ class FirebaseRepository {
 
 
     fun createNewNote(note: Note) {
+        // Creating empty note to get generated id
         val noteID = fbFirestore.collection("Users")
             .document(uid!!)
             .collection("Notes")
             .document()
             .id
 
+        // Updating note id to generated id
         note.id = noteID
 
         fbFirestore.collection("Users")
@@ -121,11 +127,6 @@ class FirebaseRepository {
             .addOnFailureListener {
                 Log.d(REPO_DEBUG, it.message.toString())
             }
-            .addOnProgressListener { task ->
-                val progress = (100.0 * task.bytesTransferred) / task.totalByteCount
-                Log.d("UPLOAD", "Upload is $progress% done")
-
-            }
     }
 
 
@@ -162,6 +163,7 @@ class FirebaseRepository {
     }
 
 
+    // Getting photo URL
     private fun getPhotoURL(storage: StorageReference, note: Note) {
         storage.downloadUrl
             .addOnSuccessListener {

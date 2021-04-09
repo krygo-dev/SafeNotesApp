@@ -15,6 +15,7 @@ import com.krygodev.safenotes.viewmodels.RegistrationViewModel
 import kotlinx.android.synthetic.main.fragment_registration.*
 
 
+// Fragment responsible for creating new account for user
 class RegistrationFragment: BaseFragment() {
 
     private val fbAuth = FirebaseAuth.getInstance()
@@ -37,6 +38,7 @@ class RegistrationFragment: BaseFragment() {
     }
 
 
+    // Creating new account
     private fun createAccountClick() {
         create_account_button.setOnClickListener {
             val username = reg_username_input.text?.trim().toString()
@@ -52,6 +54,7 @@ class RegistrationFragment: BaseFragment() {
                     fbAuth.createUserWithEmailAndPassword(email, password)
                         .addOnSuccessListener { authResult ->
                             val fbUser = authResult.user
+                            // Sending verification email to user
                             fbUser!!.sendEmailVerification()
                                 .addOnCompleteListener { task ->
                                     if (task.isSuccessful) {

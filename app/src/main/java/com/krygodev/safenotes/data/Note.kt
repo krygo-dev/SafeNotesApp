@@ -5,6 +5,7 @@ import com.google.firebase.Timestamp
 import kotlinx.android.parcel.Parcelize
 
 
+// Data class holding note data
 @Parcelize
 data class Note(var id: String? = null,
                 val title: String? = null,
