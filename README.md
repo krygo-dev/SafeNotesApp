@@ -20,7 +20,7 @@ Android app for taking notes and adding photos to them. At first user have to si
   <img src="https://github.com/krygo-dev/SafeNotesApp/blob/main/screenshots/startup_screen.png" width="400" height="822" style="padding:5px">
   <img src="https://github.com/krygo-dev/SafeNotesApp/blob/main/screenshots/home_screen.png" width="400" height="822" style="padding:5px">
   <img src="https://github.com/krygo-dev/SafeNotesApp/blob/main/screenshots/share_delete.png" width="400" height="822" style="padding:5px">
-  <img src="https://github.com/krygo-dev/SafeNotesApp/blob/main/screenshotsadd_note_screen.png" width="400" height="822" style="padding:5px">
+  <img src="https://github.com/krygo-dev/SafeNotesApp/blob/main/screenshots/add_note_screen.png" width="400" height="822" style="padding:5px">
 </p>
 
 License
